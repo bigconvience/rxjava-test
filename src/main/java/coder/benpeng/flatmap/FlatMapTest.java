@@ -3,9 +3,12 @@ package coder.benpeng.flatmap;
 import coder.benpeng.util.Log;
 import rx.Observable;
 import rx.Subscriber;
+import rx.functions.Func1;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by benpeng.jbp on 2015/11/18.
@@ -38,6 +41,40 @@ public class FlatMapTest {
                     return Observable.from(student.getCourses());
                 })
                 .subscribe(subscriber);
+
+        final List<String> pathList = new ArrayList<>();
+        pathList.add("aaa");
+        pathList.add("bbb");
+
+        Observable
+                .from(pathList)
+                .flatMap(new Func1<String, Observable<String>>() {
+                    @Override
+                    public Observable<String> call(String s) {
+                        System.out.println("error");
+                        return Observable.error(new Exception("fff"));
+                    }
+                }).subscribe(new Subscriber<String>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                System.out.println("error");
+            }
+
+            @Override
+            public void onNext(String s) {
+
+            }
+        });
+
+        try {
+            System.in.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 

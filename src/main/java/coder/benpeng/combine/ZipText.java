@@ -1,9 +1,8 @@
 package coder.benpeng.combine;
 
 import rx.Observable;
-import rx.exceptions.Exceptions;
 
-import java.io.IOException;
+import java.net.SocketException;
 
 /**
  * Created by jiangbenpeng on 4/25/16.
@@ -26,20 +25,28 @@ public class ZipText {
 
 
         Observable<Integer> merge = Observable.merge(
-                Observable.just(1, 3, 5),
+                Observable.error(new SocketException()),
                 Observable.just(2, 4, 6)
         );
 
         merge.subscribe(
                 (sum) -> System.out.println("sum: " + sum),
-                (e) -> System.err.println("error for merge"),
+                (e) -> {
+                    System.err.println("error for merge");
+                    e.printStackTrace();
+                },
                 () -> System.out.println("Merge Completed"));
 
-
         try {
-            System.in.read();
-        } catch (IOException e) {
-            e.printStackTrace();
+            Thread.currentThread().sleep(100000);
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
         }
+
+//        try {
+//            System.in.read();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 }
