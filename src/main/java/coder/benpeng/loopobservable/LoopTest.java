@@ -25,6 +25,7 @@ public class LoopTest {
             public void call(Subscriber<? super Integer> subscriber) {
                 int i = 0;
                 while (i++ < 10) {
+                    System.out.println("call current thread: " + Thread.currentThread());
                     subscriber.onNext(i);
                     try {
                         Thread.sleep(100);
@@ -34,7 +35,9 @@ public class LoopTest {
                 }
                 subscriber.onCompleted();
             }
-        }).subscribeOn(Schedulers.newThread()).subscribe(new Subscriber<Integer>() {
+        }).subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation())
+                .subscribe(new Subscriber<Integer>() {
             @Override
             public void onCompleted() {
                 System.out.println("completed");
@@ -47,7 +50,7 @@ public class LoopTest {
 
             @Override
             public void onNext(Integer integer) {
-                System.out.println("current: " + integer);
+                System.out.println("current: " + integer + " thread: " + Thread.currentThread());
             }
         });
 

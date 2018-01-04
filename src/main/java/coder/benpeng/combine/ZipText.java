@@ -15,8 +15,8 @@ public class ZipText {
 
         Observable<Integer> zip = Observable.zip(
                 Observable.just(1, 3, 4),
-                Observable.empty(),
-                (a, b) -> a );
+                Observable.just(5, 6, 7),
+                (a, b) -> a + b);
 
         zip.subscribe(
                 sum -> System.out.println("sum: " + sum),
