@@ -1,9 +1,11 @@
 package coder.benpeng;
 
-import coder.benpeng.util.Log;
 import rx.Observable;
-import rx.Observer;
-import rx.Subscriber;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
+
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by benpeng.jbp on 2015/11/15.
@@ -12,35 +14,25 @@ public class Knife {
     private static final String tag = "Knife";
 
     public static void main(String[] args) {
-        Observer<String> observer = new Observer<String>() {
-            @Override
-            public void onNext(String s) {
-                Log.d(tag, "Item: " + s);
-            }
+        //被观察者在主线程中，每1ms发送一个事件
+        Observable.interval(1, TimeUnit.MILLISECONDS)
+                //.subscribeOn(Schedulers.newThread())
+                //将观察者的工作放在新线程环境中
+                .observeOn(Schedulers.newThread())
+                //观察者处理每1000ms才处理一个事件
+                .subscribe((aLong) -> {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("TAG ---->" + aLong);
+                });
 
-            @Override
-            public void onCompleted() {
-                Log.d(tag, "Completed!");
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.d(tag, "Error!");
-            }
-        };
-
-        Observable observable = Observable.create(new Observable.OnSubscribe<String>() {
-            @Override
-            public void call(Subscriber<? super String> subscriber) {
-                subscriber.onNext("Hello");
-                subscriber.onNext("Hi");
-                subscriber.onNext("Aloha");
-                subscriber.onCompleted();
-            }
-        });
-
-        observable.subscribe(observer);
-
-        Observable.just("a", "b").subscribe(observer);
+        try {
+            System.in.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
