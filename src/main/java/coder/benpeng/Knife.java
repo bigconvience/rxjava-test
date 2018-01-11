@@ -1,8 +1,9 @@
 package coder.benpeng;
 
-import rx.Observable;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
+
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -13,9 +14,12 @@ import java.util.concurrent.TimeUnit;
 public class Knife {
     private static final String tag = "Knife";
 
+    enum Irrelevant {INSTANCE;}
+
+
     public static void main(String[] args) {
         //被观察者在主线程中，每1ms发送一个事件
-        Observable.interval(1, TimeUnit.MILLISECONDS)
+        Disposable disposable = Observable.interval(1, TimeUnit.MILLISECONDS)
                 //.subscribeOn(Schedulers.newThread())
                 //将观察者的工作放在新线程环境中
                 .observeOn(Schedulers.newThread())
@@ -28,6 +32,8 @@ public class Knife {
                     }
                     System.out.println("TAG ---->" + aLong);
                 });
+
+
 
         try {
             System.in.read();
