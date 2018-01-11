@@ -1,6 +1,7 @@
-package coder.benpeng;
+package coder.benpeng.rx2;
 
 
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -11,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by benpeng.jbp on 2015/11/15.
  */
-public class Knife {
+public class Backpressure {
     private static final String tag = "Knife";
 
     enum Irrelevant {INSTANCE;}
@@ -30,10 +31,8 @@ public class Knife {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    System.out.println("TAG ---->" + aLong);
+                    System.out.println("observable TAG ---->" + aLong);
                 });
-
-
 
         try {
             System.in.read();

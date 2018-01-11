@@ -1,5 +1,6 @@
-package coder.benpeng;
+package coder.benpeng.rx2;
 
+import coder.benpeng.rx2.Backpressure;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -32,10 +33,10 @@ public class ObservableNull {
 
 
         Observable<Object> b1 = Observable.create(s -> {
-            s.onNext(Knife.Irrelevant.INSTANCE);
+            s.onNext(Backpressure.Irrelevant.INSTANCE);
             s.onComplete();
         });
-        b1.subscribe(s -> System.out.println("subscribe: " + s + (s instanceof Knife.Irrelevant)),
+        b1.subscribe(s -> System.out.println("subscribe: " + s + (s instanceof Backpressure.Irrelevant)),
                 throwable -> {
                     System.out.println("error");
                 });
